@@ -10,7 +10,7 @@
 void Polytope::init(const Collision2D& collision, const std::vector<Point2D>& points)
 {
 	_points.clear();
-	_distances.clear();
+	_dIdx = 0;
 	_points = points;
 
 	if (_points.size() < 3)
@@ -56,12 +56,12 @@ void Polytope::expand(const Collision2D& collision)
 		{
 			Line line(A, minkowskiPoint);
 			float computedValue = line.squaredDistanceFrom({ 0.0f, 0.0f });
-			_distances.push_back({ false, computedValue, idxA, _points.size() });
+			_distances[_dIdx++] = { false, computedValue, idxA, _points.size() };
 		}
 		{
 			Line line(B, minkowskiPoint);
 			float computedValue = line.squaredDistanceFrom({ 0.0f, 0.0f });
-			_distances.push_back({ false, computedValue, idxB, _points.size() });
+			_distances[_dIdx++] = { false, computedValue, idxB, _points.size() };
 		}
 		_points.push_back(minkowskiPoint);
 		++i;
@@ -111,13 +111,13 @@ void Polytope::initDistances()
 		Line line(_points[i], _points[(i + 1) % _points.size()]);
 		// TODO : 값이 너무 커질 수 있나?
 		float distance = line.squaredDistanceFrom({ 0.0f, 0.0f });
-		_distances.push_back({ false, distance, i, (i + 1) % _points.size() });
+		_distances[_dIdx++] = { false, distance, i, (i + 1) % _points.size() };
 	}
 }
 void Polytope::getMinDistance(float& distance, size_t& idxA, size_t& idxB)
 {
 	int wh = 0;
-	for (int i = 0; i < _distances.size(); ++i)
+	for (int i = 0; i < _dIdx; ++i)
 		if (!std::get<0>(_distances[i]))
 		{
 			distance = std::get<1>(_distances[i]);
@@ -127,7 +127,7 @@ void Polytope::getMinDistance(float& distance, size_t& idxA, size_t& idxB)
 			break;
 		}
 	
-	for (int i = 0; i < _distances.size(); ++i)
+	for (int i = 0; i < _dIdx; ++i)
 		if (!std::get<0>(_distances[i]) && distance > std::get<1>(_distances[i]))
 		{
 			distance = std::get<1>(_distances[i]);

@@ -17,6 +17,7 @@ public:
     }
     virtual void update() override
     {
+        return;
         const std::vector<Collision2D*> collisions = _collider->collisions();
         for (int i = 0; i < collisions.size(); ++i)
         {

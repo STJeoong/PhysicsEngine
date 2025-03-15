@@ -8,6 +8,7 @@ class Polytope
 {
 	static const int MAX_ITERATION = 20;
 public:
+	Polytope() : _distances(MAX_ITERATION * 3) {}
 	void init(const Collision2D& collision, const std::vector<Point2D>& points);
 	void expand(const Collision2D& collision);
 	const Vector2D& normal() const { return _normal; }
@@ -18,5 +19,6 @@ private:
 
 	std::vector<Point2D> _points;
 	std::vector<std::tuple<bool, float, size_t, size_t>> _distances;
+	size_t _dIdx = 0;
 	Vector2D _normal;
 };

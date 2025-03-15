@@ -8,7 +8,7 @@ sf::RenderWindow window(sf::VideoMode(800, 600), "2D Physics Engine");
 int main()
 {
     std::ios_base::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0);
-    demo1();
+    demo2();
     World::init({ 0.0f, 10.0f });
 
 
